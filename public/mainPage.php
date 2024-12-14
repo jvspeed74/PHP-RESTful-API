@@ -23,77 +23,18 @@
         </nav>
     </div>
 </header>
-<section id="hero">
-    <div class="hero-container">
-        <div class="slide">
-            <img src="images/racing.jpg" class="hero-image">
-        </div>
-        <div class="slide">
-            <img src="images/monaco.jpg" class="hero-image">
-        </div>
-        <div class="slide">
-            <img src="images/betterracing.jpg" class="hero-image">
-        </div>
-        <div class="slide">
-            <img src="images/cooltrack.jpg" class="hero-image">
-        </div>
-    </div>
-</section>
 <section id="tracks" class="section">
     <div class="container">
         <h2>F1 Tracks</h2>
         <p>Discover iconic F1 race tracks around the world.</p>
-        <div class="track-list">
-            <div class="track-item">
-                <img src="images/silverstone.jpg" alt="Silverstone Circuit">
-                <h3>Silverstone Circuit</h3>
-                <p><strong>Location:</strong> Northamptonshire, UK</p>
-                <p>The iconic British Grand Prix is a must-watch!</p>
-            </div>
-            <div class="track-item">
-                <img src="images/monaco.jpg" alt="Monaco Grand Prix">
-                <h3>Monaco Grand Prix</h3>
-                <p><strong>Location:</strong> Monte Carlo, Monaco</p>
-                <p>One of the most prestigious and historic F1 races.</p>
-            </div>
-            <div class="track-item">
-                <img src="images/suzuka.jpg" alt="Suzuka Circuit">
-                <h3>Suzuka Circuit</h3>
-                <p><strong>Location:</strong> Suzuka, Japan</p>
-                <p>Famous for its challenging and fast layout.</p>
-            </div>
-        </div>
-        <a href="/tracksPage" class="btn">See All Tracks</a>
+        <a href="/eventsPage" class="btn">View Events</a>
     </div>
 </section>
-<section id="drivers" class="section">
+<section id="events" class="section">
     <div class="container">
-        <h2>Meet the F1 Drivers</h2>
-        <p>Get to know the stars of Formula 1!</p>
-        <div class="driver-list">
-            <div class="driver-item">
-                <img src="images/lewis-hamilton.jpg" alt="Lewis Hamilton">
-                <h3>Lewis Hamilton</h3>
-                <p><strong>Team:</strong> Mercedes</p>
-                <p><strong>Nationality:</strong> British</p>
-                <p><strong>World Championships:</strong> 7</p>
-            </div>
-            <div class="driver-item">
-                <img src="images/max-verstappen.jpg" alt="Max Verstappen">
-                <h3>Max Verstappen</h3>
-                <p><strong>Team:</strong> Red Bull Racing</p>
-                <p><strong>Nationality:</strong> Dutch</p>
-                <p><strong>World Championships:</strong> 2</p>
-            </div>
-            <div class="driver-item">
-                <img src="images/charles-leclerc.jpg" alt="Charles Leclerc">
-                <h3>Charles Leclerc</h3>
-                <p><strong>Team:</strong> Ferrari</p>
-                <p><strong>Nationality:</strong> Monegasque</p>
-                <p><strong>World Championships:</strong> 0</p>
-            </div>
-        </div>
-        <a href="/driversPage" class="btn">See All Drivers</a>
+        <h2>Upcoming F1 Events</h2>
+        <p>Stay updated on the latest F1 races and events.</p>
+        <a href="/driversPage" class="btn">Meet the Drivers</a>
     </div>
 </section>
 <footer>
@@ -101,20 +42,5 @@
         <p>&copy; 2024 F1 Center. All Rights Reserved.</p>
     </div>
 </footer>
-<script>
-    window.onload = function() {
-        const container = document.querySelector('.hero-container');
-        const slides = document.querySelectorAll('.slide');
-
-        let currentIndex = 0;
-
-        function nextSlide() {
-            currentIndex = (currentIndex + 1) % slides.length;
-            container.style.transform = `translateX(-${currentIndex * 100}%)`;
-        }
-
-        setInterval(nextSlide, 7000);
-    };
-</script>
 </body>
 </html>

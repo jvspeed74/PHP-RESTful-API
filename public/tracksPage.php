@@ -4,79 +4,30 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Formula 1 Tracks</title>
-    <link rel="stylesheet" href="css/global.css">
+    <link rel="stylesheet" href="css/tracks.css">
     <script>
-        let allTracks = [];
-        let currentPage = 1;
-        const tracksPerPage = 5;
-
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener("DOMContentLoaded", function () {
             fetchTracks();
-            document.querySelector('#search').addEventListener('input', filterTracks);
         });
 
         function fetchTracks() {
-            fetch('http://localhost:8080/api/tracks').then(response => response.json()).then(tracks => {
-                allTracks = tracks;
-                renderTracks();
-                renderPagination();
-            }).catch(error => console.error('Error fetching tracks:', error));
-        }
-
-        function renderTracks() {
-            const trackList = document.querySelector('.track-list');
-            trackList.innerHTML = '';
-
-            const filteredTracks = getFilteredTracks();
-
-            const startIndex = (currentPage - 1) * tracksPerPage;
-            const endIndex = startIndex + tracksPerPage;
-            const tracksToDisplay = filteredTracks.slice(startIndex, endIndex);
-
-            tracksToDisplay.forEach(track => {
-                const trackItem = document.createElement('div');
-                trackItem.classList.add('track-item');
-                trackItem.innerHTML = `
-                        <h3>${track.name}</h3>
-                        <p><strong>Length:</strong> ${track.length_km} km</p>
-                        <p><strong>Continent:</strong> ${track.continent}</p>
-                        <p><strong>Description:</strong> ${track.description}</p>
-                    `;
-                trackList.appendChild(trackItem);
-            });
-        }
-
-        function getFilteredTracks() {
-            const searchQuery = document.querySelector('#search').value.toLowerCase();
-            return allTracks.filter(track => {
-                return track.name.toLowerCase().includes(searchQuery) ||
-                    track.continent.toLowerCase().includes(searchQuery) ||
-                    track.description.toLowerCase().includes(searchQuery);
-            });
-        }
-
-        function renderPagination() {
-            const filteredTracks = getFilteredTracks();
-            const totalPages = Math.ceil(filteredTracks.length / tracksPerPage);
-            const pagination = document.querySelector('.pagination');
-            pagination.innerHTML = '';
-
-            for (let i = 1; i <= totalPages; i++) {
-                const pageBtn = document.createElement('button');
-                pageBtn.classList.add('page-btn');
-                pageBtn.innerText = i;
-                pageBtn.onclick = () => {
-                    currentPage = i;
-                    renderTracks();
-                };
-                pagination.appendChild(pageBtn);
-            }
-        }
-
-        function filterTracks() {
-            currentPage = 1;
-            renderTracks();
-            renderPagination();
+            fetch('/tracks')
+                .then(response => response.json())
+                .then(tracks => {
+                    const trackList = document.querySelector('.track-list');
+                    tracks.forEach(track => {
+                        const trackItem = document.createElement('div');
+                        trackItem.classList.add('track-item');
+                        trackItem.innerHTML = `
+                                <h3>${track.name}</h3>
+                                <p><strong>Length:</strong> ${track.length_km} km</p>
+                                <p><strong>Continent:</strong> ${track.continent}</p>
+                                <p><strong>Description:</strong> ${track.description}</p>
+                            `;
+                        trackList.appendChild(trackItem);
+                    });
+                })
+                .catch(error => console.error('Error fetching tracks:', error));
         }
     </script>
 </head>
@@ -101,9 +52,8 @@
     <div class="container">
         <h2>F1 Tracks</h2>
         <p>Explore the iconic Formula 1 tracks from around the world.</p>
-        <input type="text" id="search" placeholder="Search tracks..." class="search-box">
-        <div class="track-list"></div>
-        <div class="pagination"></div>
+        <div class="track-list">
+        </div>
     </div>
 </section>
 <footer>
