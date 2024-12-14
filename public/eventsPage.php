@@ -4,29 +4,80 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Formula 1 Events</title>
-    <link rel="stylesheet" href="css/events.css">
+    <link rel="stylesheet" href="css/global.css">
     <script>
+        let allEvents = [];
+        const eventsPerPage = 5;
+        let currentPage = 1;
+
         document.addEventListener("DOMContentLoaded", function () {
             fetchEvents();
+            document.querySelector('#search').addEventListener('input', filterEvents);
         });
 
         function fetchEvents() {
             fetch('http://localhost:8080/api/events')
                 .then(response => response.json())
                 .then(events => {
-                    const eventList = document.querySelector('.event-list');
-                    events.forEach(event => {
-                        const eventItem = document.createElement('div');
-                        eventItem.classList.add('event-item');
-                        eventItem.innerHTML = `
-                                <h3>${event.title}</h3>
-                                <p><strong>Date:</strong> ${event.scheduled_date}</p>
-                                <p><strong>Status:</strong> ${event.status}</p>
-                            `;
-                        eventList.appendChild(eventItem);
-                    });
+                    allEvents = events;
+                    renderEvents();
+                    renderPagination();
                 })
                 .catch(error => console.error('Error fetching events:', error));
+        }
+
+        function renderEvents() {
+            const eventList = document.querySelector('.event-list');
+            eventList.innerHTML = '';
+
+            const filteredEvents = getFilteredEvents();
+
+            const startIndex = (currentPage - 1) * eventsPerPage;
+            const endIndex = startIndex + eventsPerPage;
+            const eventsToDisplay = filteredEvents.slice(startIndex, endIndex);
+
+            eventsToDisplay.forEach(event => {
+                const eventItem = document.createElement('div');
+                eventItem.classList.add('event-item');
+                eventItem.innerHTML = `
+                        <h3>${event.title}</h3>
+                        <p><strong>Date:</strong> ${event.scheduled_date}</p>
+                        <p><strong>Status:</strong> ${event.status}</p>
+                    `;
+                eventList.appendChild(eventItem);
+            });
+        }
+
+        function getFilteredEvents() {
+            const searchQuery = document.querySelector('#search').value.toLowerCase();
+            return allEvents.filter(event => {
+                return event.title.toLowerCase().includes(searchQuery) ||
+                    event.status.toLowerCase().includes(searchQuery);
+            });
+        }
+
+        function renderPagination() {
+            const filteredEvents = getFilteredEvents();
+            const totalPages = Math.ceil(filteredEvents.length / eventsPerPage);
+            const pagination = document.querySelector('.pagination');
+            pagination.innerHTML = '';
+
+            for (let i = 1; i <= totalPages; i++) {
+                const pageBtn = document.createElement('button');
+                pageBtn.classList.add('page-btn');
+                pageBtn.innerText = i;
+                pageBtn.onclick = () => {
+                    currentPage = i;
+                    renderEvents();
+                };
+                pagination.appendChild(pageBtn);
+            }
+        }
+
+        function filterEvents() {
+            currentPage = 1;
+            renderEvents();
+            renderPagination();
         }
     </script>
 </head>
@@ -51,8 +102,9 @@
     <div class="container">
         <h2>Formula 1 Events</h2>
         <p>Stay up to date with the latest Formula 1 events around the world.</p>
-        <div class="event-list">
-        </div>
+        <input type="text" id="search" placeholder="Search events..." class="search-box">
+        <div class="event-list"></div>
+        <div class="pagination"></div>
     </div>
 </section>
 <footer>

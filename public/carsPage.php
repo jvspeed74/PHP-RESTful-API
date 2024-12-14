@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Formula 1 Cars</title>
-    <link rel="stylesheet" href="css/cars.css">
+    <link rel="stylesheet" href="css/global.css">
     <script>
         let allCars = [];
         let currentPage = 1;
@@ -40,10 +40,9 @@
                 const carItem = document.createElement('div');
                 carItem.classList.add('car-item');
                 carItem.innerHTML = `
-                    <h3>Team ID: ${car.team_id}</h3>
-                    <p><strong>Model:</strong> ${car.model}</p>
-                    <p><strong>Year:</strong> ${car.year}</p>
-                `;
+                        <h3>Model:</strong> ${car.model}</h3>
+                        <p><strong>Year:</strong> ${car.year}</p>
+                    `;
                 carList.appendChild(carItem);
             });
         }
@@ -98,7 +97,6 @@
         </nav>
     </div>
 </header>
-
 <section id="cars" class="section">
     <div class="container">
         <h2>Formula 1 Cars</h2>
@@ -108,7 +106,6 @@
         <div class="pagination"></div>
     </div>
 </section>
-
 <footer>
     <div class="container">
         <p>&copy; 2024 Formula 1 Center. All Rights Reserved.</p>
