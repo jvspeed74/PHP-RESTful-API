@@ -22,7 +22,7 @@ pagination, secured by various authentication mechanisms.
 ## API Documentation
 
 Interactive API documentation, generated from the OpenAPI specification, is available via Swagger UI deployed on GitHub
-Pages: [F1 Management API Documentation](https://jvspeed74.github.io/F1-Management-API/).
+Pages: [F1 Management API Documentation](https://jvspeed74.github.io/PHP-RESTful-API/).
 
 ## Setup & Running
 
