@@ -7,4 +7,3 @@ require __DIR__ . '/../vendor/autoload.php';
 
 // Initialize configuration from config/config.ini
 Config::init();
-
