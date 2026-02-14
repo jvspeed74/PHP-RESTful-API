@@ -11,6 +11,12 @@ declare(strict_types=1);
 
 class Config
 {
+    /**
+     * Configuration structure:
+     * array<section-name, array<key, value>>
+     *
+     * @var array<string, array<string, string>>|null
+     */
     private static ?array $config = null;
 
     /**
@@ -38,7 +44,25 @@ class Config
             throw new RuntimeException("Failed to parse configuration file: {$configFile}");
         }
 
-        self::$config = $iniConfig;
+        // Ensure structure is the expected nested array<string,array<string,string>>
+        $normalized = [];
+        foreach ($iniConfig as $section => $values) {
+            if (!is_array($values)) {
+                continue;
+            }
+            $normalized[(string) $section] = [];
+            foreach ($values as $k => $v) {
+                // Only scalar or null values are expected from parse_ini_file; guard for safety
+                if (is_scalar($v) || $v === null) {
+                    $normalized[(string) $section][(string) $k] = (string) $v;
+                } else {
+                    // Fallback to empty string for non-scalar values (unexpected)
+                    $normalized[(string) $section][(string) $k] = '';
+                }
+            }
+        }
+
+        self::$config = $normalized;
 
         // Override with environment variables (takes precedence)
         self::overrideWithEnvironment();
@@ -46,24 +70,29 @@ class Config
 
     /**
      * Override configuration values with environment variables
-     * Supports nested keys using dot notation: "database.host" → $_ENV['DB_HOST']
+     * Supports nested keys using SECTION_KEY env var naming (e.g. DATABASE_HOST)
+     *
+     * @return void
      */
     private static function overrideWithEnvironment(): void
     {
-        if (!is_array(self::$config)) {
+        if (self::$config === null) {
             return;
         }
 
         foreach (self::$config as $section => $values) {
-            if (!is_array($values)) {
-                continue;
-            }
+            // $values is array<string,string> by construction
 
             foreach (array_keys($values) as $key) {
                 $envKey = self::getEnvironmentKeyName($section, $key);
 
-                if (isset($_ENV[$envKey])) {
-                    self::$config[$section][$key] = trim($_ENV[$envKey]);
+                if (array_key_exists($envKey, $_ENV)) {
+                    $val = $_ENV[$envKey];
+                    // Ensure we only convert scalars/null to string
+                    if (!is_scalar($val) && $val !== null) {
+                        $val = '';
+                    }
+                    self::$config[$section][$key] = (string) $val;
                 }
             }
         }
@@ -71,7 +100,7 @@ class Config
 
     /**
      * Generate environment variable name from section and key
-     * database.host -> DB_HOST
+     * database.host -> DATABASE_HOST
      * app.name -> APP_NAME
      */
     private static function getEnvironmentKeyName(string $section, string $key): string
@@ -90,7 +119,7 @@ class Config
     {
         self::init();
 
-        $parts = explode('.', $key);
+        $parts = explode('.', $key, 2);
 
         if (count($parts) !== 2) {
             throw new InvalidArgumentException(
@@ -107,7 +136,7 @@ class Config
      * Get all configuration for a section
      *
      * @param string $section Section name
-     * @return array
+     * @return array<string, string>
      */
     public static function getSection(string $section): array
     {
@@ -119,7 +148,7 @@ class Config
     /**
      * Get database configuration
      *
-     * @return array
+     * @return array<string, string>
      */
     public static function getDatabase(): array
     {
@@ -136,7 +165,7 @@ class Config
     {
         self::init();
 
-        $parts = explode('.', $key);
+        $parts = explode('.', $key, 2);
 
         if (count($parts) !== 2) {
             return false;
@@ -150,7 +179,7 @@ class Config
     /**
      * Get all configuration
      *
-     * @return array
+     * @return array<string, array<string, string>>
      */
     public static function all(): array
     {
