@@ -83,8 +83,9 @@ fabric.properties
 # Directory for storing logs
 /logs
 
-# Environment file
+# Configuration files (environment-specific)
 .env
+/config/config.ini
 
 # Code Quality Caches
 .phpunit.cache

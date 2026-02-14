@@ -33,15 +33,18 @@ return [
     },
     'db' => function () {
         $capsule = new Manager();
+        $dbConfig = Config::getDatabase();
+
         $capsule->addConnection(
             [
-                'driver' => 'mysql',
-                'host' => '127.0.0.1',
-                'database' => 'f1_db',
-                'username' => 'root',
-                'password' => '',
-                'charset' => 'utf8mb4',
-                'collation' => 'utf8mb4_general_ci',
+                'driver' => $dbConfig['driver'] ?? 'mysql',
+                'host' => $dbConfig['host'] ?? '127.0.0.1',
+                'port' => $dbConfig['port'] ?? 3306,
+                'database' => $dbConfig['database'] ?? 'f1_db',
+                'username' => $dbConfig['username'] ?? 'root',
+                'password' => $dbConfig['password'] ?? '',
+                'charset' => $dbConfig['charset'] ?? 'utf8mb4',
+                'collation' => $dbConfig['collation'] ?? 'utf8mb4_general_ci',
             ],
         );
         $capsule->setAsGlobal();
