@@ -2,6 +2,8 @@
 
 declare(strict_types=1);
 
+use Config\Config;
+
 require __DIR__ . '/../vendor/autoload.php';
 
 // Load config classes

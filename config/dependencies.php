@@ -3,15 +3,13 @@
 
 declare(strict_types=1);
 
-use App\Authentication\JWTAuthenticator;
+use Config\Config;
 use Illuminate\Database\Capsule\Manager;
 use Monolog\Formatter\LineFormatter;
 use Monolog\Handler\StreamHandler;
 use Monolog\Level;
 use Monolog\Logger;
-use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Log\LoggerInterface;
-use Slim\Psr7\Factory\ResponseFactory;
 
 return [
     // Define Monolog logger as a service

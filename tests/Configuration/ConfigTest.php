@@ -12,7 +12,7 @@ use Config\AppConfig;
 use Config\DatabaseConfig;
 use Config\LogConfig;
 
-covers(\Config::class);
+covers(\Config\Config::class);
 
 describe('Config', function () {
 
@@ -21,7 +21,7 @@ describe('Config', function () {
         $GLOBALS['_ENV_BACKUP'] ??= $_ENV;
 
         // Reset Config's static initialization state using reflection
-        $reflection = new \ReflectionClass(\Config::class);
+        $reflection = new \ReflectionClass(\Config\Config::class);
         $initializedProperty = $reflection->getProperty('initialized');
         $initializedProperty->setAccessible(true);
         $initializedProperty->setValue(null, false);
@@ -44,7 +44,7 @@ describe('Config', function () {
         $_ENV = $GLOBALS['_ENV_BACKUP'];
 
         // Reset Config's static state again after each test
-        $reflection = new \ReflectionClass(\Config::class);
+        $reflection = new \ReflectionClass(\Config\Config::class);
         $initializedProperty = $reflection->getProperty('initialized');
         $initializedProperty->setAccessible(true);
         $initializedProperty->setValue(null, false);
@@ -68,29 +68,22 @@ describe('Config', function () {
             resetTestEnv();
 
             // Simply call init() and if it doesn't throw, test passes
-            \Config::init();
+            \Config\Config::init();
             expect(true)->toBeTrue();
-        });
-
-        test('init() throws RuntimeException when .env file is missing', function () {
-            // This test requires mocking or using a non-existent directory
-            // We'll skip the actual file check since we're testing in isolation
-            // In a real scenario, you might use a temporary directory
-            $this->markTestSkipped('Skipped: Requires filesystem mocking for .env check');
         });
 
         test('init() is idempotent - calling multiple times does not reinitialize', function () {
             resetTestEnv();
 
             setTestEnv(['APP_NAME' => 'First Call']);
-            \Config::init();
-            $firstConfig = \Config::app();
+            \Config\Config::init();
+            $firstConfig = \Config\Config::app();
 
             // Change the environment variable
             setTestEnv(['APP_NAME' => 'Second Call']);
             // Call init again - it should not reload because it's already initialized
-            \Config::init();
-            $secondConfig = \Config::app();
+            \Config\Config::init();
+            $secondConfig = \Config\Config::app();
 
             // Both should return the same config object from the first call
             expect($firstConfig->getName())->toBe('First Call');
@@ -104,7 +97,7 @@ describe('Config', function () {
         test('returns DatabaseConfig instance', function () {
             resetTestEnv();
 
-            $config = \Config::database();
+            $config = \Config\Config::database();
 
             expect($config)->toBeInstanceOf(DatabaseConfig::class);
         });
@@ -113,7 +106,7 @@ describe('Config', function () {
             resetTestEnv();
 
             // Call database() without explicitly calling init()
-            $config = \Config::database();
+            $config = \Config\Config::database();
 
             expect($config)->toBeInstanceOf(DatabaseConfig::class);
             expect($config->getHost())->toBe('127.0.0.1');
@@ -122,8 +115,8 @@ describe('Config', function () {
         test('returns the same instance across multiple calls', function () {
             resetTestEnv();
 
-            $first = \Config::database();
-            $second = \Config::database();
+            $first = \Config\Config::database();
+            $second = \Config\Config::database();
 
             expect($first)->toBe($second);
         });
@@ -131,7 +124,7 @@ describe('Config', function () {
         test('database config reflects environment variables', function () {
             setTestEnv(['DATABASE_HOST' => 'testhost']);
 
-            $config = \Config::database();
+            $config = \Config\Config::database();
 
             expect($config->getHost())->toBe('testhost');
         });
@@ -142,7 +135,7 @@ describe('Config', function () {
         test('returns AppConfig instance', function () {
             resetTestEnv();
 
-            $config = \Config::app();
+            $config = \Config\Config::app();
 
             expect($config)->toBeInstanceOf(AppConfig::class);
         });
@@ -151,7 +144,7 @@ describe('Config', function () {
             resetTestEnv();
 
             // Call app() without explicitly calling init()
-            $config = \Config::app();
+            $config = \Config\Config::app();
 
             expect($config)->toBeInstanceOf(AppConfig::class);
             expect($config->getName())->toBe('F1 Management API');
@@ -160,8 +153,8 @@ describe('Config', function () {
         test('returns the same instance across multiple calls', function () {
             resetTestEnv();
 
-            $first = \Config::app();
-            $second = \Config::app();
+            $first = \Config\Config::app();
+            $second = \Config\Config::app();
 
             expect($first)->toBe($second);
         });
@@ -169,7 +162,7 @@ describe('Config', function () {
         test('app config reflects environment variables', function () {
             setTestEnv(['APP_NAME' => 'Custom Application']);
 
-            $config = \Config::app();
+            $config = \Config\Config::app();
 
             expect($config->getName())->toBe('Custom Application');
         });
@@ -180,7 +173,7 @@ describe('Config', function () {
         test('returns LogConfig instance', function () {
             resetTestEnv();
 
-            $config = \Config::log();
+            $config = \Config\Config::log();
 
             expect($config)->toBeInstanceOf(LogConfig::class);
         });
@@ -189,7 +182,7 @@ describe('Config', function () {
             resetTestEnv();
 
             // Call log() without explicitly calling init()
-            $config = \Config::log();
+            $config = \Config\Config::log();
 
             expect($config)->toBeInstanceOf(LogConfig::class);
             expect($config->getLevel())->toBe('debug');
@@ -198,8 +191,8 @@ describe('Config', function () {
         test('returns the same instance across multiple calls', function () {
             resetTestEnv();
 
-            $first = \Config::log();
-            $second = \Config::log();
+            $first = \Config\Config::log();
+            $second = \Config\Config::log();
 
             expect($first)->toBe($second);
         });
@@ -207,7 +200,7 @@ describe('Config', function () {
         test('log config reflects environment variables', function () {
             setTestEnv(['LOG_LEVEL' => 'critical']);
 
-            $config = \Config::log();
+            $config = \Config\Config::log();
 
             expect($config->getLevel())->toBe('critical');
         });
@@ -218,9 +211,9 @@ describe('Config', function () {
         test('all three config getters return correct types', function () {
             resetTestEnv();
 
-            $database = \Config::database();
-            $app = \Config::app();
-            $log = \Config::log();
+            $database = \Config\Config::database();
+            $app = \Config\Config::app();
+            $log = \Config\Config::log();
 
             expect($database)->toBeInstanceOf(DatabaseConfig::class);
             expect($app)->toBeInstanceOf(AppConfig::class);
@@ -230,11 +223,11 @@ describe('Config', function () {
         test('all configs are initialized together in one init() call', function () {
             resetTestEnv();
 
-            \Config::init();
+            \Config\Config::init();
 
-            $database = \Config::database();
-            $app = \Config::app();
-            $log = \Config::log();
+            $database = \Config\Config::database();
+            $app = \Config\Config::app();
+            $log = \Config\Config::log();
 
             expect($database)->toBeInstanceOf(DatabaseConfig::class);
             expect($app)->toBeInstanceOf(AppConfig::class);
@@ -252,9 +245,9 @@ describe('Config', function () {
                 'LOG_CHANNEL' => 'test',
             ]);
 
-            $app = \Config::app();
-            $database = \Config::database();
-            $log = \Config::log();
+            $app = \Config\Config::app();
+            $database = \Config\Config::database();
+            $log = \Config\Config::log();
 
             expect($app->getName())->toBe('Test API');
             expect($app->getEnv())->toBe('testing');

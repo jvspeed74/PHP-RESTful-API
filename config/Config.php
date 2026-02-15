@@ -2,9 +2,8 @@
 
 declare(strict_types=1);
 
-use Config\AppConfig;
-use Config\DatabaseConfig;
-use Config\LogConfig;
+namespace Config;
+
 use Dotenv\Dotenv;
 
 /**
@@ -31,16 +30,11 @@ class Config
 
         $envFile = __DIR__ . '/../.env';
 
-        if (!file_exists($envFile)) {
-            throw new RuntimeException(
-                "Environment file not found: {$envFile}\n" .
-                "Please copy .env.example to .env and update with your settings."
-            );
+        if (file_exists($envFile)) {
+            // Load .env file
+            $dotenv = Dotenv::createImmutable(__DIR__ . '/..');
+            $dotenv->load();
         }
-
-        // Load .env file
-        $dotenv = Dotenv::createImmutable(__DIR__ . '/..');
-        $dotenv->load();
 
         // Initialize config objects
         self::$databaseConfig = DatabaseConfig::fromEnv();
