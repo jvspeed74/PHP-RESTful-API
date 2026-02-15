@@ -2,8 +2,15 @@
 
 declare(strict_types=1);
 
-require __DIR__ . '/config.php';
+use Config\Config;
+
 require __DIR__ . '/../vendor/autoload.php';
 
-// Initialize configuration from config/config.ini
+// Load config classes
+require __DIR__ . '/DatabaseConfig.php';
+require __DIR__ . '/AppConfig.php';
+require __DIR__ . '/LogConfig.php';
+require __DIR__ . '/Config.php';
+
+// Initialize configuration from .env
 Config::init();
