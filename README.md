@@ -31,15 +31,21 @@ Pages: [F1 Management API Documentation](https://jvspeed74.github.io/PHP-RESTful
 Ideally this project should be run in a Docker container, but due to time constraints, it was not fully implemented. May
 be added in the future.
 
+#### Configuration:
+
+This project uses `.env` files for configuration with strongly-typed configuration classes. See [CONFIG_MIGRATION.md](CONFIG_MIGRATION.md) for details.
+
 1. **Dependencies:** Install PHP dependencies using `composer install`.
-2. **Database:**
+2. **Configuration:**
+    * Copy `.env.example` to `.env`: `cp .env.example .env`
+    * Update `.env` with your database and application settings
+3. **Database:**
     * Set up a MariaDB instance.
     * Import the schema from `f1_db.sql`.
-    * Configure database connection details (typically via environment variables or a configuration file - not detailed
-      in provided context).
-3. **Running the Application:**
+    * Configure database connection in `.env` file
+4. **Running the Application:**
     * The application can be served using a local PHP development server (e.g., `php -S localhost:8000 -t public`).
-4. **Running Tests:**
+5. **Running Tests:**
     * Unit tests: `vendor/bin/pest`
     * Integration tests: Requires a running application and database. Configure Newman with the appropriate environment
       variables and run the Postman collection.

@@ -2,116 +2,96 @@
 
 declare(strict_types=1);
 
+use Config\AppConfig;
+use Config\DatabaseConfig;
+use Config\LogConfig;
+use Dotenv\Dotenv;
+
 /**
  * Application Configuration
  *
- * Loads configuration from config.ini and environment variables.
- * Environment variables take precedence over config.ini values.
+ * Loads configuration from .env file and provides strongly typed access
+ * to configuration sections through dedicated config classes.
  */
-
 class Config
 {
-    /**
-     * Configuration structure:
-     * array<section-name, array<key, value>>
-     *
-     * @var array<string, array<string, string>>|null
-     */
-    private static ?array $config = null;
+    private static ?DatabaseConfig $databaseConfig = null;
+    private static ?AppConfig $appConfig = null;
+    private static ?LogConfig $logConfig = null;
+    private static bool $initialized = false;
 
     /**
-     * Initialize configuration from ini file and environment variables
+     * Initialize configuration from .env file
      */
     public static function init(): void
     {
-        if (self::$config !== null) {
+        if (self::$initialized) {
             return;
         }
 
-        $configFile = __DIR__ . '/config.ini';
+        $envFile = __DIR__ . '/../.env';
 
-        if (!file_exists($configFile)) {
+        if (!file_exists($envFile)) {
             throw new RuntimeException(
-                "Configuration file not found: {$configFile}\n" .
-                "Please copy config.ini.example to config.ini and update with your settings."
+                "Environment file not found: {$envFile}\n" .
+                "Please copy .env.example to .env and update with your settings."
             );
         }
 
-        // Load configuration from INI file
-        $iniConfig = @parse_ini_file($configFile, true, INI_SCANNER_RAW);
+        // Load .env file
+        $dotenv = Dotenv::createImmutable(__DIR__ . '/..');
+        $dotenv->load();
 
-        if ($iniConfig === false) {
-            throw new RuntimeException("Failed to parse configuration file: {$configFile}");
-        }
+        // Initialize config objects
+        self::$databaseConfig = DatabaseConfig::fromEnv();
+        self::$appConfig = AppConfig::fromEnv();
+        self::$logConfig = LogConfig::fromEnv();
 
-        // Ensure structure is the expected nested array<string,array<string,string>>
-        $normalized = [];
-        foreach ($iniConfig as $section => $values) {
-            if (!is_array($values)) {
-                continue;
-            }
-            $normalized[(string) $section] = [];
-            foreach ($values as $k => $v) {
-                // Only scalar or null values are expected from parse_ini_file; guard for safety
-                if (is_scalar($v) || $v === null) {
-                    $normalized[(string) $section][(string) $k] = (string) $v;
-                } else {
-                    // Fallback to empty string for non-scalar values (unexpected)
-                    $normalized[(string) $section][(string) $k] = '';
-                }
-            }
-        }
-
-        self::$config = $normalized;
-
-        // Override with environment variables (takes precedence)
-        self::overrideWithEnvironment();
+        self::$initialized = true;
     }
 
     /**
-     * Override configuration values with environment variables
-     * Supports nested keys using SECTION_KEY env var naming (e.g. DATABASE_HOST)
-     *
-     * @return void
+     * Get database configuration
      */
-    private static function overrideWithEnvironment(): void
+    public static function database(): DatabaseConfig
     {
-        if (self::$config === null) {
-            return;
-        }
-
-        foreach (self::$config as $section => $values) {
-            // $values is array<string,string> by construction
-
-            foreach (array_keys($values) as $key) {
-                $envKey = self::getEnvironmentKeyName($section, $key);
-
-                if (array_key_exists($envKey, $_ENV)) {
-                    $val = $_ENV[$envKey];
-                    // Ensure we only convert scalars/null to string
-                    if (!is_scalar($val) && $val !== null) {
-                        $val = '';
-                    }
-                    self::$config[$section][$key] = (string) $val;
-                }
-            }
-        }
+        self::init();
+        return self::$databaseConfig;
     }
 
     /**
-     * Generate environment variable name from section and key
-     * database.host -> DATABASE_HOST
-     * app.name -> APP_NAME
+     * Get application configuration
      */
-    private static function getEnvironmentKeyName(string $section, string $key): string
+    public static function app(): AppConfig
     {
-        return strtoupper("{$section}_{$key}");
+        self::init();
+        return self::$appConfig;
     }
 
     /**
-     * Get a configuration value
+     * Get logging configuration
+     */
+    public static function log(): LogConfig
+    {
+        self::init();
+        return self::$logConfig;
+    }
+
+    /**
+     * Get database configuration as array (for backward compatibility)
      *
-     * @param string $key Configuration key in dot notation (e.g., "database.host")
+     * @return array<string, string|int>
+     */
+    public static function getDatabase(): array
+    {
+        return self::database()->toArray();
+    }
+
+    /**
+     * Get a configuration value (for backward compatibility)
+     * Supports dot notation: "database.host", "app.debug", "logging.level"
+     *
+     * @param string $key Configuration key in dot notation
      * @param mixed $default Default value if key not found
      * @return mixed
      */
@@ -129,62 +109,89 @@ class Config
 
         [$section, $subkey] = $parts;
 
-        return self::$config[$section][$subkey] ?? $default;
+        return match ($section) {
+            'database' => match ($subkey) {
+                'host' => self::$databaseConfig->getHost(),
+                'port' => self::$databaseConfig->getPort(),
+                'database' => self::$databaseConfig->getDatabase(),
+                'username' => self::$databaseConfig->getUsername(),
+                'password' => self::$databaseConfig->getPassword(),
+                'charset' => self::$databaseConfig->getCharset(),
+                'collation' => self::$databaseConfig->getCollation(),
+                'driver' => self::$databaseConfig->getDriver(),
+                default => $default,
+            },
+            'app' => match ($subkey) {
+                'name' => self::$appConfig->getName(),
+                'env' => self::$appConfig->getEnv(),
+                'debug' => self::$appConfig->isDebug(),
+                default => $default,
+            },
+            'logging' => match ($subkey) {
+                'level' => self::$logConfig->getLevel(),
+                'path' => self::$logConfig->getPath(),
+                'channel' => self::$logConfig->getChannel(),
+                default => $default,
+            },
+            default => $default,
+        };
     }
 
     /**
-     * Get all configuration for a section
+     * Get all configuration for a section (for backward compatibility)
      *
      * @param string $section Section name
-     * @return array<string, string>
+     * @return array<string, mixed>
      */
     public static function getSection(string $section): array
     {
         self::init();
 
-        return self::$config[$section] ?? [];
+        return match ($section) {
+            'database' => self::$databaseConfig->toArray(),
+            'app' => [
+                'name' => self::$appConfig->getName(),
+                'env' => self::$appConfig->getEnv(),
+                'debug' => self::$appConfig->isDebug(),
+            ],
+            'logging' => [
+                'level' => self::$logConfig->getLevel(),
+                'path' => self::$logConfig->getPath(),
+                'channel' => self::$logConfig->getChannel(),
+            ],
+            default => [],
+        };
     }
 
     /**
-     * Get database configuration
-     *
-     * @return array<string, string>
-     */
-    public static function getDatabase(): array
-    {
-        return self::getSection('database');
-    }
-
-    /**
-     * Check if a configuration key exists
+     * Check if a configuration key exists (for backward compatibility)
      *
      * @param string $key Configuration key in dot notation
      * @return bool
      */
     public static function has(string $key): bool
     {
-        self::init();
-
-        $parts = explode('.', $key, 2);
-
-        if (count($parts) !== 2) {
+        try {
+            $value = self::get($key);
+            return $value !== null;
+        } catch (InvalidArgumentException) {
             return false;
         }
-
-        [$section, $subkey] = $parts;
-
-        return isset(self::$config[$section][$subkey]);
     }
 
     /**
-     * Get all configuration
+     * Get all configuration (for backward compatibility)
      *
-     * @return array<string, array<string, string>>
+     * @return array<string, array<string, mixed>>
      */
     public static function all(): array
     {
         self::init();
 
-        return self::$config ?? [];
+        return [
+            'database' => self::getSection('database'),
+            'app' => self::getSection('app'),
+            'logging' => self::getSection('logging'),
+        ];
     }
 }
