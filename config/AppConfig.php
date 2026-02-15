@@ -15,8 +15,7 @@ readonly class AppConfig
         private string $name,
         private string $env,
         private bool $debug,
-    ) {
-    }
+    ) {}
 
     /**
      * Create AppConfig from environment variables
@@ -57,4 +56,3 @@ readonly class AppConfig
         return $this->env === 'development';
     }
 }
-

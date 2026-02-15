@@ -15,8 +15,7 @@ readonly class LogConfig
         private string $level,
         private string $path,
         private string $channel,
-    ) {
-    }
+    ) {}
 
     /**
      * Create LogConfig from environment variables
@@ -45,4 +44,3 @@ readonly class LogConfig
         return $this->channel;
     }
 }
-

@@ -20,8 +20,7 @@ readonly class DatabaseConfig
         private string $charset,
         private string $collation,
         private string $driver,
-    ) {
-    }
+    ) {}
 
     /**
      * Create DatabaseConfig from environment variables
@@ -80,4 +79,3 @@ readonly class DatabaseConfig
         return $this->driver;
     }
 }
-
