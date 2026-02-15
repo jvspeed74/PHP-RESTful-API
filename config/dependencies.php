@@ -3,15 +3,13 @@
 
 declare(strict_types=1);
 
-use App\Authentication\JWTAuthenticator;
+use Config\Config;
 use Illuminate\Database\Capsule\Manager;
 use Monolog\Formatter\LineFormatter;
 use Monolog\Handler\StreamHandler;
 use Monolog\Level;
 use Monolog\Logger;
-use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Log\LoggerInterface;
-use Slim\Psr7\Factory\ResponseFactory;
 
 return [
     // Define Monolog logger as a service
@@ -33,15 +31,18 @@ return [
     },
     'db' => function () {
         $capsule = new Manager();
+        $dbConfig = Config::database();
+
         $capsule->addConnection(
             [
-                'driver' => 'mysql',
-                'host' => '127.0.0.1',
-                'database' => 'f1_db',
-                'username' => 'root',
-                'password' => '',
-                'charset' => 'utf8mb4',
-                'collation' => 'utf8mb4_general_ci',
+                'driver' => $dbConfig->getDriver(),
+                'host' => $dbConfig->getHost(),
+                'port' => $dbConfig->getPort(),
+                'database' => $dbConfig->getDatabase(),
+                'username' => $dbConfig->getUsername(),
+                'password' => $dbConfig->getPassword(),
+                'charset' => $dbConfig->getCharset(),
+                'collation' => $dbConfig->getCollation(),
             ],
         );
         $capsule->setAsGlobal();

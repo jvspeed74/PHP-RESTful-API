@@ -5,7 +5,8 @@
   "license": "MIT",
   "autoload": {
     "psr-4": {
-      "App\\": "src/"
+      "App\\": "src/",
+      "Config\\": "config/"
     }
   },
   "authors": [
@@ -23,23 +24,24 @@
     }
   ],
   "require": {
-    "slim/slim": "^4.14.0",
-    "illuminate/database": "^v11.30.0",
-    "zircote/swagger-php": "^4.11.1",
-    "slim/psr7": "^1.7.0",
-    "php-di/php-di": "^7.0.7",
-    "php-di/slim-bridge": "^3.4.0",
-    "slim/http": "^1.4.0",
-    "monolog/monolog": "^3.7.0",
-    "illuminate/pagination": "^v11.30.0",
-    "firebase/php-jwt": "^6.10"
+    "slim/slim": "~4.14.0",
+    "illuminate/database": "~v11.30.0",
+    "zircote/swagger-php": "~4.11.1",
+    "slim/psr7": "~1.7.0",
+    "php-di/php-di": "~7.0.7",
+    "php-di/slim-bridge": "~3.4.0",
+    "slim/http": "~1.4.0",
+    "monolog/monolog": "~3.7.0",
+    "illuminate/pagination": "~v11.30.0",
+    "firebase/php-jwt": "~6.10",
+    "vlucas/phpdotenv": "~5.6"
   },
   "require-dev": {
-    "phpstan/phpstan": "^2.0.1",
-    "mockery/mockery": "^1.6.12",
-    "friendsofphp/php-cs-fixer": "^v3.64.0",
-    "pestphp/pest": "^v3.5.1",
-    "phpstan/phpstan-mockery": "^2.0.0"
+    "phpstan/phpstan": "2.0.1",
+    "mockery/mockery": "1.6.12",
+    "friendsofphp/php-cs-fixer": "v3.64.0",
+    "pestphp/pest": "v3.5.1",
+    "phpstan/phpstan-mockery": "2.0.0"
   },
   "scripts": {
     "fix": "vendor/bin/php-cs-fixer fix",

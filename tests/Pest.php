@@ -17,6 +17,22 @@ declare(strict_types=1);
 
 /*
 |--------------------------------------------------------------------------
+| Bootstrap & Autoloading
+|--------------------------------------------------------------------------
+|
+| Load the application bootstrap to ensure all classes are available
+|
+*/
+require __DIR__ . '/../vendor/autoload.php';
+
+// Load config classes without initializing (we'll do that in tests)
+require __DIR__ . '/../config/DatabaseConfig.php';
+require __DIR__ . '/../config/AppConfig.php';
+require __DIR__ . '/../config/LogConfig.php';
+require __DIR__ . '/../config/Config.php';
+
+/*
+|--------------------------------------------------------------------------
 | Expectations
 |--------------------------------------------------------------------------
 |
@@ -43,7 +59,35 @@ expect()->extend('toBeOne', function () {
 |
 */
 
-function something()
+/**
+ * Store original $_ENV state before tests
+ */
+$GLOBALS['_ENV_BACKUP'] = $_ENV;
+
+/**
+ * Set environment variables for tests
+ *
+ * @param array<string, mixed> $vars Key-value pairs to set in $_ENV
+ */
+function setTestEnv(array $vars): void
 {
-    // ..
+    foreach ($vars as $key => $value) {
+        $_ENV[$key] = $value;
+    }
+}
+
+/**
+ * Reset $_ENV to original state before tests
+ */
+function resetTestEnv(): void
+{
+    $_ENV = $GLOBALS['_ENV_BACKUP'];
+}
+
+/**
+ * Get a specific environment variable for testing
+ */
+function getTestEnv(string $key, mixed $default = null): mixed
+{
+    return $_ENV[$key] ?? $default;
 }

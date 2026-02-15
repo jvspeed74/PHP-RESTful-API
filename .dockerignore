@@ -1,0 +1,15 @@
+.git
+.github
+.gitignore
+.idea
+.editorconfig
+.env.local
+.env.*.local
+logs
+.phpunit.cache
+*.log
+node_modules
+package-lock.json
+.postman
+.htaccess
+phpunit.xml.bak
