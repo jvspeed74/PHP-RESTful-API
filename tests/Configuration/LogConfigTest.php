@@ -1,5 +1,9 @@
 <?php
 
+/** @noinspection PhpExpressionResultUnusedInspection */
+
+/** @noinspection PhpUnhandledExceptionInspection */
+
 declare(strict_types=1);
 
 namespace Tests\Configuration;
@@ -9,7 +13,6 @@ use Config\LogConfig;
 covers(LogConfig::class);
 
 describe('LogConfig', function () {
-
     beforeEach(function () {
         // Store original $_ENV
         $GLOBALS['_ENV_BACKUP'] ??= $_ENV;
@@ -21,7 +24,6 @@ describe('LogConfig', function () {
     });
 
     describe('fromEnv()', function () {
-
         test('uses default values when environment variables are not set', function () {
             resetTestEnv();
 
@@ -61,7 +63,6 @@ describe('LogConfig', function () {
     });
 
     describe('getters', function () {
-
         test('getLevel() returns log level', function () {
             setTestEnv(['LOG_LEVEL' => 'info']);
 
@@ -88,7 +89,6 @@ describe('LogConfig', function () {
     });
 
     describe('default values', function () {
-
         test('default level is debug', function () {
             resetTestEnv();
 
@@ -115,7 +115,6 @@ describe('LogConfig', function () {
     });
 
     describe('environment variable variations', function () {
-
         test('supports various log levels', function () {
             $levels = ['debug', 'info', 'notice', 'warning', 'error', 'critical', 'alert', 'emergency'];
 
@@ -141,6 +140,3 @@ describe('LogConfig', function () {
         });
     });
 });
-
-
-

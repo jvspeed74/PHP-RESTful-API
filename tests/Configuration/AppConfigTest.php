@@ -1,5 +1,9 @@
 <?php
 
+/** @noinspection PhpExpressionResultUnusedInspection */
+
+/** @noinspection PhpUnhandledExceptionInspection */
+
 declare(strict_types=1);
 
 namespace Tests\Configuration;
@@ -148,6 +152,3 @@ describe('AppConfig', function () {
         });
     });
 });
-
-
-
