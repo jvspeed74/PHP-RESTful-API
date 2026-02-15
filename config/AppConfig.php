@@ -9,12 +9,12 @@ namespace Config;
  *
  * Strongly typed representation of application settings from environment variables.
  */
-class AppConfig
+readonly class AppConfig
 {
     public function __construct(
-        private readonly string $name,
-        private readonly string $env,
-        private readonly bool $debug,
+        private string $name,
+        private string $env,
+        private bool $debug,
     ) {
     }
 

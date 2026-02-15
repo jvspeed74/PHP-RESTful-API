@@ -9,17 +9,17 @@ namespace Config;
  *
  * Strongly typed representation of database settings from environment variables.
  */
-class DatabaseConfig
+readonly class DatabaseConfig
 {
     public function __construct(
-        private readonly string $host,
-        private readonly int $port,
-        private readonly string $database,
-        private readonly string $username,
-        private readonly string $password,
-        private readonly string $charset,
-        private readonly string $collation,
-        private readonly string $driver,
+        private string $host,
+        private int $port,
+        private string $database,
+        private string $username,
+        private string $password,
+        private string $charset,
+        private string $collation,
+        private string $driver,
     ) {
     }
 
@@ -78,25 +78,6 @@ class DatabaseConfig
     public function getDriver(): string
     {
         return $this->driver;
-    }
-
-    /**
-     * Get database configuration as an array (for Eloquent)
-     *
-     * @return array<string, string|int>
-     */
-    public function toArray(): array
-    {
-        return [
-            'driver' => $this->driver,
-            'host' => $this->host,
-            'port' => $this->port,
-            'database' => $this->database,
-            'username' => $this->username,
-            'password' => $this->password,
-            'charset' => $this->charset,
-            'collation' => $this->collation,
-        ];
     }
 }
 

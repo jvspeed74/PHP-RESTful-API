@@ -29,15 +29,6 @@ echo "   Level: " . $logConfig->getLevel() . "\n";
 echo "   Path: " . $logConfig->getPath() . "\n";
 echo "   Channel: " . $logConfig->getChannel() . "\n\n";
 
-echo "4. Testing Backward Compatibility:\n";
-echo "   Config::get('database.host'): " . Config::get('database.host') . "\n";
-echo "   Config::get('app.name'): " . Config::get('app.name') . "\n";
-echo "   Config::get('logging.level'): " . Config::get('logging.level') . "\n";
-echo "   Config::has('database.host'): " . (Config::has('database.host') ? 'true' : 'false') . "\n\n";
-
-echo "5. Testing getDatabase() array method:\n";
-$dbArray = Config::getDatabase();
-echo "   Array keys: " . implode(', ', array_keys($dbArray)) . "\n\n";
 
 echo "✓ All tests passed!\n";
 

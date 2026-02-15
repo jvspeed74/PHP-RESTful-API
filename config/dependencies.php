@@ -33,18 +33,18 @@ return [
     },
     'db' => function () {
         $capsule = new Manager();
-        $dbConfig = Config::getDatabase();
+        $dbConfig = Config::database();
 
         $capsule->addConnection(
             [
-                'driver' => $dbConfig['driver'] ?? 'mysql',
-                'host' => $dbConfig['host'] ?? '127.0.0.1',
-                'port' => $dbConfig['port'] ?? 3306,
-                'database' => $dbConfig['database'] ?? 'f1_db',
-                'username' => $dbConfig['username'] ?? 'root',
-                'password' => $dbConfig['password'] ?? '',
-                'charset' => $dbConfig['charset'] ?? 'utf8mb4',
-                'collation' => $dbConfig['collation'] ?? 'utf8mb4_general_ci',
+                'driver' => $dbConfig->getDriver(),
+                'host' => $dbConfig->getHost(),
+                'port' => $dbConfig->getPort(),
+                'database' => $dbConfig->getDatabase(),
+                'username' => $dbConfig->getUsername(),
+                'password' => $dbConfig->getPassword(),
+                'charset' => $dbConfig->getCharset(),
+                'collation' => $dbConfig->getCollation(),
             ],
         );
         $capsule->setAsGlobal();

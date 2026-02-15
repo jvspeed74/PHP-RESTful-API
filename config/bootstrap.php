@@ -8,7 +8,7 @@ require __DIR__ . '/../vendor/autoload.php';
 require __DIR__ . '/DatabaseConfig.php';
 require __DIR__ . '/AppConfig.php';
 require __DIR__ . '/LogConfig.php';
-require __DIR__ . '/config.php';
+require __DIR__ . '/Config.php';
 
 // Initialize configuration from .env
 Config::init();

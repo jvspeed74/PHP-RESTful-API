@@ -72,22 +72,9 @@ Xdebug is configured in the container. Configure your IDE:
 
 ### Environment Variables
 
-Configuration is managed via `/config/config.ini` file (created from `config.ini.example`):
+Configuration is managed via `.env` file at the project root:
 
-```ini
-[database]
-host = mariadb
-port = 3306
-database = f1_db
-username = f1_user
-password = f1_password
-
-[app]
-env = development
-debug = true
-```
-
-**For Docker Compose**: Environment variables override config.ini values
+**For Docker Compose**:
 ```env
 DATABASE_HOST=mariadb
 DATABASE_PORT=3306
@@ -95,17 +82,21 @@ DATABASE_DATABASE=f1_db
 DATABASE_USERNAME=f1_user
 DATABASE_PASSWORD=f1_password
 APP_ENV=development
+APP_DEBUG=true
 ```
 
-**For local XAMPP development** (without Docker), update `/config/config.ini`:
-```ini
-[database]
-host = 127.0.0.1
-username = root
-password =
+**For local XAMPP development** (without Docker):
+```env
+DATABASE_HOST=127.0.0.1
+DATABASE_PORT=3306
+DATABASE_DATABASE=f1_db
+DATABASE_USERNAME=root
+DATABASE_PASSWORD=
+APP_ENV=development
+APP_DEBUG=true
 ```
 
-The `Config` class (`config/config.php`) loads settings with environment variables taking precedence.
+The `Config` class (`config/config.php`) loads settings from `.env` file using strongly-typed configuration classes. See `CONFIG_MIGRATION.md` for detailed documentation.
 
 ## Composer
 

@@ -9,12 +9,12 @@ namespace Config;
  *
  * Strongly typed representation of logging settings from environment variables.
  */
-class LogConfig
+readonly class LogConfig
 {
     public function __construct(
-        private readonly string $level,
-        private readonly string $path,
-        private readonly string $channel,
+        private string $level,
+        private string $path,
+        private string $channel,
     ) {
     }
 
