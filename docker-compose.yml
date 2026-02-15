@@ -29,7 +29,7 @@ services:
     image: mariadb:11.4
     container_name: f1_api_db
     ports:
-      - "3307:3306"
+      - "3306:3306"
     environment:
       MARIADB_ALLOW_EMPTY_PASSWORD: "yes"
       MARIADB_DATABASE: f1_db
