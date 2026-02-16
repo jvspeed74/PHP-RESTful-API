@@ -1,5 +1,3 @@
-# Create .gitattributes in project root
-@"
 # Auto-detect text files and normalize line endings to LF on checkin
 * text=auto eol=lf
 
@@ -25,9 +23,3 @@
 *.zip binary
 *.tar binary
 *.gz binary
-"@ | Out-File -FilePath .gitattributes -Encoding utf8 -NoNewline
-
-# Remove BOM if present
-$content = Get-Content .gitattributes -Raw
-$utf8NoBom = New-Object System.Text.UTF8Encoding $false
-[System.IO.File]::WriteAllText("$PWD\.gitattributes", $content, $utf8NoBom)
