@@ -11,7 +11,7 @@
         });
 
         function fetchTracks() {
-            fetch('/tracks')
+            fetch('http://localhost:8080/api/tracks')
                 .then(response => response.json())
                 .then(tracks => {
                     const trackList = document.querySelector('.track-list');

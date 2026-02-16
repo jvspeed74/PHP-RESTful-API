@@ -16,7 +16,7 @@
         });
 
         function fetchCars() {
-            fetch('/cars')
+            fetch('http://localhost:8080/api/cars')
                 .then(response => response.json())
                 .then(cars => {
                 allCars = cars;

@@ -11,7 +11,7 @@
         });
 
         function fetchTeams() {
-            fetch('/teams')  <!-- Assuming the team data will be fetched from this endpoint -->
+            fetch('http://localhost:8080/api/teams')  <!-- Assuming the team data will be fetched from this endpoint -->
                 .then(response => response.json())
                 .then(teams => {
                     const teamList = document.querySelector('.team-list');

@@ -11,7 +11,7 @@
         });
 
         function fetchDrivers() {
-            fetch('/drivers')
+            fetch('http://localhost:8080/api/drivers')
                 .then(response => response.json())
                 .then(drivers => {
                     const driverList = document.querySelector('.driver-list');

@@ -11,7 +11,7 @@
         });
 
         function fetchEvents() {
-            fetch('/events')
+            fetch('http://localhost:8080/api/events')
                 .then(response => response.json())
                 .then(events => {
                     const eventList = document.querySelector('.event-list');
