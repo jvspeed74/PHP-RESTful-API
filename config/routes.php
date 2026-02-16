@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-use App\Middleware\AuthMiddleware;
 use App\Controllers\{AuthController, CarController, DriverController, EventController, TeamController, TrackController};
 use Psr\Http\Message\ResponseInterface as Response;
+use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\App;
 use Slim\Routing\RouteCollectorProxy;
 
@@ -22,8 +22,66 @@ return function (App $app): void {
         return $response;
     });
 
-    // Team routes
-    $app->group('/teams', function (RouteCollectorProxy $group) {
+    // ============================================
+    // SPA PAGE ROUTES (Serve HTML)
+    // ============================================
+    // These routes render PHP pages with embedded JavaScript that call the API endpoints below
+
+    $app->get('/', function (Request $request, Response $response) {
+        ob_start();
+        require __DIR__ . '/../public/mainPage.php';
+        $html = ob_get_clean();
+        $response->getBody()->write($html);
+        return $response->withHeader('Content-Type', 'text/html');
+    });
+
+    $app->get('/teamsPage', function (Request $request, Response $response) {
+        ob_start();
+        require __DIR__ . '/../public/teamsPage.php';
+        $html = ob_get_clean();
+        $response->getBody()->write($html);
+        return $response->withHeader('Content-Type', 'text/html');
+    });
+
+    $app->get('/driversPage', function (Request $request, Response $response) {
+        ob_start();
+        require __DIR__ . '/../public/driversPage.php';
+        $html = ob_get_clean();
+        $response->getBody()->write($html);
+        return $response->withHeader('Content-Type', 'text/html');
+    });
+
+    $app->get('/tracksPage', function (Request $request, Response $response) {
+        ob_start();
+        require __DIR__ . '/../public/tracksPage.php';
+        $html = ob_get_clean();
+        $response->getBody()->write($html);
+        return $response->withHeader('Content-Type', 'text/html');
+    });
+
+    $app->get('/eventsPage', function (Request $request, Response $response) {
+        ob_start();
+        require __DIR__ . '/../public/eventsPage.php';
+        $html = ob_get_clean();
+        $response->getBody()->write($html);
+        return $response->withHeader('Content-Type', 'text/html');
+    });
+
+    $app->get('/carsPage', function (Request $request, Response $response) {
+        ob_start();
+        require __DIR__ . '/../public/carsPage.php';
+        $html = ob_get_clean();
+        $response->getBody()->write($html);
+        return $response->withHeader('Content-Type', 'text/html');
+    });
+
+    // ============================================
+    // API ROUTES (Return JSON)
+    // ============================================
+    // All API endpoints are namespaced under /api to prevent collision with SPA page routes
+
+    // Team API routes
+    $app->group('/api/teams', function (RouteCollectorProxy $group) {
         $group->get('', TeamController::class . ':getAll');
         $group->get('/{id:\d+}', TeamController::class . ':getById');
         $group->post('', TeamController::class . ':create');
@@ -31,8 +89,8 @@ return function (App $app): void {
         $group->delete('/{id:\d+}', TeamController::class . ':delete');
     });
 
-    // Event routes
-    $app->group('/events', function (RouteCollectorProxy $group) {
+    // Event API routes
+    $app->group('/api/events', function (RouteCollectorProxy $group) {
         $group->get('', EventController::class . ':getAll');
         $group->get('/{id:\d+}', EventController::class . ':getById');
         $group->post('', EventController::class . ':create');
@@ -40,8 +98,8 @@ return function (App $app): void {
         $group->delete('/{id:\d+}', EventController::class . ':delete');
     });
 
-    // Track routes
-    $app->group('/tracks', function (RouteCollectorProxy $group) {
+    // Track API routes
+    $app->group('/api/tracks', function (RouteCollectorProxy $group) {
         $group->get('', TrackController::class . ':getAllWithParams');
         $group->get('/{id:\d+}', TrackController::class . ':getById');
         $group->post('', TrackController::class . ':create');
@@ -49,8 +107,8 @@ return function (App $app): void {
         $group->delete('/{id:\d+}', TrackController::class . ':delete');
     });
 
-    // Driver routes
-    $app->group('/drivers', function (RouteCollectorProxy $group) {
+    // Driver API routes
+    $app->group('/api/drivers', function (RouteCollectorProxy $group) {
         $group->get('', DriverController::class . ':getAll');
         $group->get('/{id:\d+}', DriverController::class . ':getById');
         $group->post('', DriverController::class . ':create');
@@ -59,8 +117,8 @@ return function (App $app): void {
         $group->get('/search', DriverController::class . ':search');
     });
 
-    // Car routes
-    $app->group('/cars', function (RouteCollectorProxy $group) {
+    // Car API routes
+    $app->group('/api/cars', function (RouteCollectorProxy $group) {
         $group->get('', CarController::class . ':getAll');
         $group->get('/{id:\d+}', CarController::class . ':getById');
         $group->post('', CarController::class . ':create');
@@ -68,8 +126,8 @@ return function (App $app): void {
         $group->delete('/{id:\d+}', CarController::class . ':delete');
     });
 
-    // Auth routes TODO need documentation
-    $app->group('/auth', function (RouteCollectorProxy $group) {
+    // Auth API routes
+    $app->group('/api/auth', function (RouteCollectorProxy $group) {
         $group->post('/login', AuthController::class . ':login');
         $group->post('/register', AuthController::class . ':register');
         $group->post('/revoke', AuthController::class . ':revoke');
