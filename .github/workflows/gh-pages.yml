@@ -5,7 +5,7 @@ on:
     branches:
       - main
     paths:
-      - 'docs/**'  # Only run workflow when changes are made in the docs folder
+      - 'openapi/**'  # Only run workflow when changes are made in the openapi folder
   workflow_dispatch:
 
 jobs:
@@ -21,7 +21,7 @@ jobs:
       - name: Merge OpenAPI Files Together
         uses: fluximus-prime/redocly-cli-github-action@v1
         with:
-          args: 'bundle docs/openapi.yaml --output openapi.yaml'
+          args: 'bundle openapi/openapi.yaml --output openapi.yaml'
 
       - name: Generate Swagger UI
         uses: Legion2/swagger-ui-action@v1.3.0

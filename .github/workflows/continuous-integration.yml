@@ -68,7 +68,7 @@ jobs:
         run: php-cs-fixer check --format=checkstyle | cs2pr --colorize
 
       - name: OpenAPI Standards
-        run: redocly lint docs/openapi.yaml --format=checkstyle | cs2pr --colorize
+        run: redocly lint openapi/openapi.yaml --format=checkstyle | cs2pr --colorize
 
       - name: Setup problem matchers for PHPUnit
         run: echo "::add-matcher::${{ runner.tool_cache }}/phpunit.json"

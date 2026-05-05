@@ -244,7 +244,7 @@ docker-compose exec php-app composer fix
 docker-compose exec php-app composer lint
 
 # Run OpenAPI linting (requires redocly-cli)
-redocly lint docs/openapi.yaml
+redocly lint openapi/openapi.yaml
 ```
 
 ## Debugging with Xdebug
