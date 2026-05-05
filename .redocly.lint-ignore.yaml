@@ -1,11 +1,11 @@
 # This file instructs Redocly's linter to ignore the rules contained for specific parts of your API.
 # See https://redocly.com/docs/cli/ for more information.
-docs/openapi.yaml:
+openapi/openapi.yaml:
   info-license:
     - '#/info'
   no-server-example.com:
     - '#/servers/0/url'
-docs/paths/cars.yaml:
+openapi/paths/cars.yaml:
   operation-operationId:
     - '#/get/operationId'
     - '#/post/operationId'
@@ -14,7 +14,7 @@ docs/paths/cars.yaml:
   security-defined:
     - '#/get'
     - '#/post'
-docs/paths/cars/{id}.yaml:
+openapi/paths/cars/{id}.yaml:
   operation-operationId:
     - '#/get/operationId'
     - '#/delete/operationId'
@@ -23,7 +23,7 @@ docs/paths/cars/{id}.yaml:
     - '#/get'
     - '#/delete'
     - '#/patch'
-docs/paths/drivers.yaml:
+openapi/paths/drivers.yaml:
   operation-operationId:
     - '#/get/operationId'
     - '#/post/operationId'
@@ -32,7 +32,7 @@ docs/paths/drivers.yaml:
   security-defined:
     - '#/get'
     - '#/post'
-docs/paths/drivers/{id}.yaml:
+openapi/paths/drivers/{id}.yaml:
   operation-operationId:
     - '#/get/operationId'
     - '#/delete/operationId'
@@ -41,12 +41,12 @@ docs/paths/drivers/{id}.yaml:
     - '#/get'
     - '#/delete'
     - '#/patch'
-docs/paths/drivers/search.yaml:
+openapi/paths/drivers/search.yaml:
   operation-operationId:
     - '#/get/operationId'
   security-defined:
     - '#/get'
-docs/paths/events.yaml:
+openapi/paths/events.yaml:
   operation-operationId:
     - '#/get/operationId'
     - '#/post/operationId'
@@ -55,7 +55,7 @@ docs/paths/events.yaml:
   security-defined:
     - '#/get'
     - '#/post'
-docs/paths/events/{id}.yaml:
+openapi/paths/events/{id}.yaml:
   operation-operationId:
     - '#/get/operationId'
     - '#/delete/operationId'
@@ -64,18 +64,18 @@ docs/paths/events/{id}.yaml:
     - '#/get'
     - '#/delete'
     - '#/patch'
-docs/paths/teams.yaml:
+openapi/paths/teams.yaml:
   operation-operationId:
     - '#/get/operationId'
     - '#/post/operationId'
   operation-4xx-response:
     - '#/get/responses'
-docs/paths/teams/{id}.yaml:
+openapi/paths/teams/{id}.yaml:
   operation-operationId:
     - '#/get/operationId'
     - '#/delete/operationId'
     - '#/patch/operationId'
-docs/paths/tracks.yaml:
+openapi/paths/tracks.yaml:
   operation-operationId:
     - '#/get/operationId'
     - '#/post/operationId'
@@ -84,7 +84,7 @@ docs/paths/tracks.yaml:
   security-defined:
     - '#/get'
     - '#/post'
-docs/paths/tracks/{id}.yaml:
+openapi/paths/tracks/{id}.yaml:
   operation-operationId:
     - '#/get/operationId'
     - '#/delete/operationId'
