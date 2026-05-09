@@ -90,3 +90,4 @@ fabric.properties
 # Code Quality Caches
 .phpunit.cache
 /.php-cs-fixer
+/.idea/

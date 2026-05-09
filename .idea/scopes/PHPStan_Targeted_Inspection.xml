@@ -1,3 +1,0 @@
-<component name="DependencyValidationManager">
-  <scope name="PHPStan Targeted Inspection" pattern="file[I425-Team-Project]:config//*.php||file[I425-Team-Project]:public//*.php||file[I425-Team-Project]:src//*.php" />
-</component>
