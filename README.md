@@ -6,24 +6,67 @@
 [![Docker](https://img.shields.io/badge/docker-ready-2496ED?logo=docker&logoColor=white)](https://www.docker.com/)
 [![License](https://img.shields.io/github/license/jvspeed74/PHP-RESTful-API)](https://github.com/jvspeed74/PHP-RESTful-API/blob/main/LICENSE)
 
-A RESTful API for Formula 1 data built with PHP, Slim 4, and Eloquent ORM. 
+A RESTful API for Formula 1 data built with PHP, Slim 4, and Eloquent ORM. Features include authentication, pagination, testing, and Docker containerization.
 
 Developed as a team project at Indiana University.
 
-Frontend design by [Evan Deal](https://github.com/evandeal).
+**[Live API Docs (Swagger UI) via Github Pages](https://jvspeed74.github.io/PHP-RESTful-API/)**
 
-**[Live API Docs (Swagger UI)](https://jvspeed74.github.io/PHP-RESTful-API/)**
+### Table of Contents
+
+* [Gallery](#gallery)
+* [Contributors](#contributors)
+* [How to Run Locally](#how-to-run-locally)
+* [Stack](#stack)
+* [CI Pipeline](#ci-pipeline)
 
 ---
+
+## Gallery
+
+---
+
 ![SPA Home](docs/assets/Screenshot%202026-05-05%20204423.png)
 
----
-
-![SPA Drivers](docs/assets/Screenshot%202026-05-05%20at%2020-46-21%20F1%20Center.png)
+> Main banner of the Single Page Application (SPA)
 
 ---
 
-## Getting Started
+![SPA Home Cards](docs/assets/Screenshot%202026-05-09%20114444.png)
+
+> Home page cards for Tracks and Drivers, including baseline information and links to their respective pages.
+
+---
+
+![SPA Drivers Pagination](docs/assets/Drivers%20Pagination.gif)
+
+> Demonstrating pagination functionality on the Drivers page, allowing users to navigate through multiple pages of driver data.
+
+---
+
+![SPA Drivers Search](docs/assets/Drivers%20Search.gif)
+
+> Demonstrating the search functionality on the Drivers page, enabling users to filter drivers by name in real-time.
+
+---
+
+## Contributors
+
+- [Jalen Vaughn](https://github.com/jvspeed74) — Lead developer; API architecture, authentication, Docker, CI/CD, and
+  documentation
+- [Evan Deal](https://github.com/evandeal) — Frontend SPA design and implementation.
+- [Matt Jobe](https://github.com/mjobe2) — Car and Driver models, repositories, and controllers
+
+Developed as a team project at Indiana University.
+
+---
+
+## How to Run Locally
+
+### Prerequisites
+
+- Docker
+- Web browser
 
 ```bash
 docker-compose up
@@ -49,4 +92,14 @@ The API will be available at `http://localhost:8080`.
 
 ## CI Pipeline
 
-Every pull request runs PHPStan static analysis, PHP CS Fixer (PER-CS2.0 standard), PestPHP unit tests, and Newman integration tests against a live MariaDB service container, all via GitHub Actions.
+Every pull request runs:
+
+- PHPStan static analysis
+- PHP CS Fixer (PER-CS2.0 standard),
+- PestPHP unit tests,
+- Newman (Postman) integration tests against a live MariaDB service container,
+
+Utilizing GitHub Actions for automation.
+
+---
+
