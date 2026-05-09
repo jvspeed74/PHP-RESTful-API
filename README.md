@@ -26,13 +26,13 @@ Developed as a team project at Indiana University.
 
 ---
 
-![SPA Home](docs/assets/Screenshot%202026-05-05%20204423.png)
+![SPA Home](docs/assets/SPA%20HOME.png)
 
 > Main banner of the Single Page Application (SPA)
 
 ---
 
-![SPA Home Cards](docs/assets/Screenshot%202026-05-09%20114444.png)
+![SPA Home Cards](docs/assets/SPA%20Home%20Cards.png)
 
 > Home page cards for Tracks and Drivers, including baseline information and links to their respective pages.
 
